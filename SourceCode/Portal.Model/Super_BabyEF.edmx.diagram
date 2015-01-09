@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="61203bbfe7df4720ae33ec6e872115de" Name="Diagram1">
+        <EntityTypeShape EntityType="SuperBabyModel.Baby" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="SuperBabyModel.TypeMaster" Width="1.5" PointX="3.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SuperBabyModel.User_Reset_Password" Width="1.5" PointX="3" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SuperBabyModel.User" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
+        <AssociationConnector Association="SuperBabyModel.FK_Baby_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="SuperBabyModel.FK_User_Reset_Password_Users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SuperBabyModel.TimelineEntry" Width="1.5" PointX="5.92022916205238" PointY="14.529905266375236" />
+        <AssociationConnector Association="SuperBabyModel.FK_TimelineEntry_TypeMaster" />
+        <AssociationConnector Association="SuperBabyModel.FK_TimelineEntry_Users" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

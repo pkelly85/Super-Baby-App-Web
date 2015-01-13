@@ -66,6 +66,7 @@ namespace SuperBabyWCF
                 UnitOfWork db = new UnitOfWork();
                 List<User> lstUser = new List<User>();
                 User objUser = new User();
+                lstUser =
                 lstUser = db.User.Get(e => e.Email.ToUpper() == EmailAddress.ToUpper()).ToList();
                 if (lstUser.Count > 0) //Email is already exist
                 {
@@ -1348,13 +1349,12 @@ namespace SuperBabyWCF
 
                             string SuperBabyWebUrl = ConfigurationManager.AppSettings["SuperBabyWebUrl"];
                             string LoginLink = SuperBabyWebUrl + "ChangePassword/Index?UR=" + Password + "&UT=" + Security.GetPasswordHash(Convert.ToString(1), Security.CreateSalt(8)) + "&initiallogin=true&Uid=" + objUser.ID.ToString() + "&Redirect=mobapp";
-                            //string LoginLink = "http://192.168.0.6/RudderWeb/ChangePassword/Index?UR=" + Password + "&UT=" + Security.GetPasswordHash(Convert.ToString(1), Security.CreateSalt(8)) + "&initiallogin=true&Uid=" + objUser.ID.ToString() + "&Redirect=mobapp";// EncryptionHandler.Encode(strResetPassKey);
 
                             string MailBody = string.Empty;
                             StringBuilder stringBuilderText = new StringBuilder();
 
 
-                            string mailContent = "<html><head><title></title></head><body><table><tr><td>Dear @user@,<br /><br /></td></tr><tr><td>You requested that we reset your password for your account with Rudder on @datetimecreated@. <br /> <br /> Please visit this link within 24 hours to reset your password: <br /></td></tr><tr><td><a href='@loginlink@'>@loginlink@</a></td></tr><tr><td>&nbsp;</td></tr><tr><td>Thanks!<br/> The Rudder Team</td></tr></table></body></html>";
+                            string mailContent = "<html><head><title></title></head><body><table><tr><td>Dear @user@,<br /><br /></td></tr><tr><td>You requested that we reset your password for your account with SuperBaby on @datetimecreated@. <br /> <br /> Please visit this link within 24 hours to reset your password: <br /></td></tr><tr><td><a href='@loginlink@'>@loginlink@</a></td></tr><tr><td>&nbsp;</td></tr><tr><td>Thanks!<br/> The SuperBaby Team</td></tr></table></body></html>";
 
                             mailContent = mailContent.Replace("@user@", "User");
                             mailContent = mailContent.Replace("@loginlink@", LoginLink);
@@ -1367,7 +1367,7 @@ namespace SuperBabyWCF
                             MailBody = stringBuilderText.ToString();
 
 
-                            SendMail(objUser.Email.Trim(), "", "", "[SupperBaby] Your Password Reset Request", MailBody, string.Empty, true, "", true, "Recognized App");
+                            SendMail(objUser.Email.Trim(), "", "", "[SupperBaby] Your Password Reset Request", MailBody, string.Empty, true, "","Recognized App");
                             #endregion
 
                             #region AddToDatabase
@@ -1624,7 +1624,7 @@ namespace SuperBabyWCF
             }
         }
 
-        public static bool SendMail(string MailTo, string MailCC, string MailBCC, string Subject, string Body, string Attachment, bool IsBodyHtml, string EmailEncoding, bool UseSSL, string FromName)
+        public static bool SendMail(string MailTo, string MailCC, string MailBCC, string Subject, string Body, string Attachment, bool IsBodyHtml, string EmailEncoding, string FromName)
         {
             MailMessage message = new MailMessage();
 
@@ -1675,7 +1675,7 @@ namespace SuperBabyWCF
             if (ConfigurationManager.AppSettings["IsProduction"].ToString().ToUpper() == "true".ToUpper())
             {
                 smtp.Host = strSMTPServer;
-                smtp.EnableSsl = UseSSL;
+                smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["Ssl"].ToString().ToLower());
             }
             else
             {

@@ -1,0 +1,116 @@
+﻿@font-face
+{
+    font-family:"FranklinGothicURWLig";
+    src: url("../fonts/f008012t.ttf");
+}
+
+body {
+    height: 100%;
+    min-height: 100%;
+    background: #FFF;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+
+html {
+    height:100%; 
+    -ms-text-size-adjust: 100%; 
+    -webkit-text-size-adjust: 100%;
+    font-family: "FranklinGothicURWLig","Franklin Gothic Medium","Franklin Gothic","ITC Franklin Gothic",Arial,sans-serif;
+}
+
+.container
+{
+    width:700px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#content
+{
+    margin-top:20px;
+}
+
+#creator
+{
+    float:left;
+    width:50%;
+    margin-top:10px;
+}
+
+#image
+{
+    display:inline-block;
+}
+#image img
+{
+    display:block;
+    max-width:700px;
+}
+
+#stats img
+{
+    display:inline;
+}
+#stats
+{
+    float:right;
+    margin-top:10px;
+}
+
+#username
+{
+    font-weight:bolder;
+}
+#username, #date
+{
+    display:block;
+    
+
+
+}
+
+
+#creator img
+{
+    height:40px;
+    width:40px;
+    float:left;
+    display:block;
+    mask:url("/GrayScaleWeb/Content/images/avatar_mask.png");
+    -webkit-mask:url("/GrayScaleWeb/Content/images/avatar_mask.png") top left / cover;
+    margin-right:10px;
+}
+
+
+header
+{
+    background-color:black;
+    height:100px;
+}
+#logo
+{
+    display:block;
+    float:left;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+#appstore
+{
+    display:block;
+    float:right;
+    margin-top:30px;
+    margin-bottom:30px;
+    
+}
+
+.footer
+{
+    width:300px;
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:40px;
+}

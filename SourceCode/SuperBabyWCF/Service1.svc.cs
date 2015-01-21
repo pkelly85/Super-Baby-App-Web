@@ -1195,6 +1195,14 @@ namespace SuperBabyWCF
                             objGetTimelineResult.GetTimelineEntryResult = objlstTimelineEntryResult;
                         }
                     }
+                    else
+                    {
+                        //response Prepare Result
+                        ResultStatus.Status = "1";
+                        ResultStatus.StatusMessage = "No TimelineData Exist!";
+                        objGetTimelineResult.ResultStatus = ResultStatus;
+                        objGetTimelineResult.GetTimelineEntryResult = objlstTimelineEntryResult;
+                    }
                 }
                 else
                 {

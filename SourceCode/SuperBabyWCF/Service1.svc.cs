@@ -1190,7 +1190,7 @@ namespace SuperBabyWCF
                         {
                             //response Prepare Result
                             ResultStatus.Status = "1";
-                            ResultStatus.StatusMessage = "No TimelineData Exist!";
+                            ResultStatus.StatusMessage = "When you and your baby work on the exercises and reach milestones, the timeline will automatically update with your progress.";
                             objGetTimelineResult.ResultStatus = ResultStatus;
                             objGetTimelineResult.GetTimelineEntryResult = objlstTimelineEntryResult;
                         }
@@ -1199,7 +1199,7 @@ namespace SuperBabyWCF
                     {
                         //response Prepare Result
                         ResultStatus.Status = "1";
-                        ResultStatus.StatusMessage = "No TimelineData Exist!";
+                        ResultStatus.StatusMessage = "When you and your baby work on the exercises and reach milestones, the timeline will automatically update with your progress.";
                         objGetTimelineResult.ResultStatus = ResultStatus;
                         objGetTimelineResult.GetTimelineEntryResult = objlstTimelineEntryResult;
                     }

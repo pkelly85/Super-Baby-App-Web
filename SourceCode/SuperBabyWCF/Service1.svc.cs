@@ -1383,7 +1383,7 @@ namespace SuperBabyWCF
                             StringBuilder stringBuilderText = new StringBuilder();
 
 
-                            string mailContent = "<html><head><title></title></head><body><table><tr><td>Dear @user@,<br /><br /></td></tr><tr><td>You requested that we reset your password for your account with Rudder on @datetimecreated@. <br /> <br /> Please visit this link within 24 hours to reset your password: <br /></td></tr><tr><td><a href='@loginlink@'>@loginlink@</a></td></tr><tr><td>&nbsp;</td></tr><tr><td>Thanks!<br/> The Rudder Team</td></tr></table></body></html>";
+                            string mailContent = "<html><head><title></title></head><body><table><tr><td>Dear @user@,<br /><br /></td></tr><tr><td>You requested that we reset your password for your account with Superbaby on @datetimecreated@. <br /> <br /> Please visit this link within 24 hours to reset your password: <br /></td></tr><tr><td><a href='@loginlink@'>@loginlink@</a></td></tr><tr><td>&nbsp;</td></tr><tr><td>Thanks!<br/> The Superbaby Team</td></tr></table></body></html>";
 
                             mailContent = mailContent.Replace("@user@", "User");
                             mailContent = mailContent.Replace("@loginlink@", LoginLink);

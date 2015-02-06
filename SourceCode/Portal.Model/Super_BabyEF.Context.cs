@@ -20,12 +20,11 @@ namespace Portal.Model
         {
         }
 
-        public SuperBabyEntities(string Conn)
-            : base(Conn)
+        public SuperBabyEntities(string s)
+            : base("name=SuperBabyEntities")
         {
         }
     
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

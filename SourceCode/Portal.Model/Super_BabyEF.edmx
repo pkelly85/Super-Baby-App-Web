@@ -54,6 +54,7 @@
           <Property Name="Message" Type="varchar(max)" Nullable="false" />
           <Property Name="MilestoneID" Type="bigint" />
           <Property Name="VideoID" Type="bigint" />
+          <Property Name="CompletedStatus" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="TypeMaster">
           <Key>
@@ -258,6 +259,7 @@
           <Property Type="Int64" Name="VideoID" />
           <NavigationProperty Name="TypeMaster" Relationship="SuperBabyModel.FK_TimelineEntry_TypeMaster" FromRole="TimelineEntry" ToRole="TypeMaster" />
           <NavigationProperty Name="User" Relationship="SuperBabyModel.FK_TimelineEntry_Users" FromRole="TimelineEntry" ToRole="User" />
+          <Property Type="Int32" Name="CompletedStatus" Nullable="false" />
         </EntityType>
         <Association Name="FK_TimelineEntry_TypeMaster">
           <End Type="SuperBabyModel.TypeMaster" Role="TypeMaster" Multiplicity="1" />
@@ -346,6 +348,7 @@
           <EntitySetMapping Name="TimelineEntries">
             <EntityTypeMapping TypeName="SuperBabyModel.TimelineEntry">
               <MappingFragment StoreEntitySet="TimelineEntry">
+                <ScalarProperty Name="CompletedStatus" ColumnName="CompletedStatus" />
                 <ScalarProperty Name="VideoID" ColumnName="VideoID" />
                 <ScalarProperty Name="MilestoneID" ColumnName="MilestoneID" />
                 <ScalarProperty Name="Message" ColumnName="Message" />

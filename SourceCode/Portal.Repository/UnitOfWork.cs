@@ -38,7 +38,6 @@ namespace Portal.Repository
             //_context.Configuration.LazyLoadingEnabled = false;
             _context = new SuperBabyEntities(entityBuilder.ToString());
         }
-
         public GenericRepository<User> User
         {
             get
@@ -48,7 +47,6 @@ namespace Portal.Repository
             }
            
         }
-
         public GenericRepository<Baby> Baby
         {
             get

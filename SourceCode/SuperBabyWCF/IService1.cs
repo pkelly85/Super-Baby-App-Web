@@ -41,7 +41,7 @@ namespace SuperBabyWCF
 
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "AddTimeline", BodyStyle = WebMessageBodyStyle.Wrapped)]
-        AddTimeline AddTimeline(string UserID, string UserToken, string Type, string Message, string MilestoneID, string VideoID);
+        AddTimeline AddTimeline(string UserID, string UserToken, string Type, string Message, string MilestoneID, string VideoID, string CompletedStatus);
 
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "GetTimeline", BodyStyle = WebMessageBodyStyle.Wrapped)]

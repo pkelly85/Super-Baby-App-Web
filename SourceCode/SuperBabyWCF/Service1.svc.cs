@@ -66,7 +66,6 @@ namespace SuperBabyWCF
                 UnitOfWork db = new UnitOfWork();
                 List<User> lstUser = new List<User>();
                 User objUser = new User();
-                lstUser =
                 lstUser = db.User.Get(e => e.Email.ToUpper() == EmailAddress.ToUpper()).ToList();
                 if (lstUser.Count > 0) //Email is already exist
                 {
@@ -1051,13 +1050,13 @@ namespace SuperBabyWCF
         /// Add Record in TimelineEntry Table 
         /// By : TTv (Milan.G 20141217)
         /// </summary>
-        public AddTimeline AddTimeline(string UserID, string UserToken, string Type, string Message, string MilestoneID, string VideoID)
+        public AddTimeline AddTimeline(string UserID, string UserToken, string Type, string Message, string MilestoneID, string VideoID, string CompletedStatus)
         {
             /* Type detail
             0 - Milestone complete
             1 - Update Weight
             2 - Update Height
-            3 - Activity 
+            3 - Video Watched 
             */
 
             AddTimeline AddTimelineResult = new AddTimeline();
@@ -1070,31 +1069,60 @@ namespace SuperBabyWCF
                 if (objTokenInfo != null && objTokenInfo.EmailID != null)
                 {
                     long lngUserID = Convert.ToInt64(UserID);
+                    int intCompletedStatus = 1;
+                    long lngMilestoneID = 0;
+                    long lngVideoID = 0;
+                    int intType = Convert.ToInt32(Type);
+
+                    if (CompletedStatus != null && CompletedStatus.Length > 0 ) intCompletedStatus = Convert.ToInt16(CompletedStatus);
+                    if (MilestoneID != null && MilestoneID.Length > 0) lngMilestoneID = Convert.ToInt64(MilestoneID);
+                    if (VideoID != null && VideoID.Length > 0) lngVideoID = Convert.ToInt64(VideoID);
 
                     List<User> lstUser = db.User.Get(m => m.ID == lngUserID).ToList();
                     if (lstUser.Count > 0)
                     {
                         User objUser = new User();
                         objUser = lstUser.FirstOrDefault();
-                        if (objUser != null)
+                        if (objUser != null) //Complete milestone
                         {
-                            // Add TimelineEntry Data
-                            TimelineEntry objTimelineEntry = new TimelineEntry();
-                            objTimelineEntry.UserID = lngUserID;
-                            objTimelineEntry.Date_Created = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
-                            objTimelineEntry.TypeID = Convert.ToInt32(Type);
-                            objTimelineEntry.Message = Message;
-                            objTimelineEntry.MilestoneID = MilestoneID == string.Empty ? 0 : Convert.ToInt64(MilestoneID);
-                            objTimelineEntry.VideoID = VideoID == string.Empty ? 0 : Convert.ToInt64(VideoID);
+                            if (intCompletedStatus == 1)
+                            {
+                                // Add TimelineEntry Data
+                                TimelineEntry objTimelineEntry = new TimelineEntry();
+                                objTimelineEntry.UserID = lngUserID;
+                                objTimelineEntry.Date_Created = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
+                                objTimelineEntry.TypeID = intType;
+                                objTimelineEntry.Message = Message;
+                                objTimelineEntry.MilestoneID = lngMilestoneID;
+                                objTimelineEntry.VideoID = lngVideoID;
+                                objTimelineEntry.CompletedStatus = intCompletedStatus;
 
-                            db.TimelineEntry.Add(objTimelineEntry);
-                            db.SaveChanges();
+                                db.TimelineEntry.Add(objTimelineEntry);
+                                db.SaveChanges();
+                            }
+                            else if (intCompletedStatus == 0)
+                            {
+                                if (intType == 0) //Milestone complete
+                                {
+                                    List<TimelineEntry> lstTimeLineEntry = db.TimelineEntry.Get(n => n.TypeID == intType && n.MilestoneID == lngMilestoneID).ToList();
+                                    if (lstTimeLineEntry.Count > 0)
+                                    {
+                                        foreach (TimelineEntry objTimeLineEntry in lstTimeLineEntry)
+                                        {
+                                            objTimeLineEntry.CompletedStatus = intCompletedStatus;
+                                            db.TimelineEntry.Update(objTimeLineEntry);
 
+                                            db.SaveChanges();
+                                        }
+                                    }
+
+                                }
+                            }
                             ResultStatus.Status = "1";
                             ResultStatus.StatusMessage = "Record Save Successfully";
                             AddTimelineResult.ResultStatus = ResultStatus;
-
                         }
+
                     }
                     else
                     {
@@ -1190,18 +1218,10 @@ namespace SuperBabyWCF
                         {
                             //response Prepare Result
                             ResultStatus.Status = "1";
-                            ResultStatus.StatusMessage = "When you and your baby work on the exercises and reach milestones, the timeline will automatically update with your progress.";
+                            ResultStatus.StatusMessage = "No TimelineData Exist!";
                             objGetTimelineResult.ResultStatus = ResultStatus;
                             objGetTimelineResult.GetTimelineEntryResult = objlstTimelineEntryResult;
                         }
-                    }
-                    else
-                    {
-                        //response Prepare Result
-                        ResultStatus.Status = "1";
-                        ResultStatus.StatusMessage = "When you and your baby work on the exercises and reach milestones, the timeline will automatically update with your progress.";
-                        objGetTimelineResult.ResultStatus = ResultStatus;
-                        objGetTimelineResult.GetTimelineEntryResult = objlstTimelineEntryResult;
                     }
                 }
                 else
@@ -1235,7 +1255,7 @@ namespace SuperBabyWCF
                 if (objTokenInfo != null && objTokenInfo.EmailID != null)
                 {
                     long lngUserID = Convert.ToInt64(UserID);
-                    List<TimelineEntry> lstCompletedMilestone = db.TimelineEntry.Get(n => n.UserID == lngUserID && n.TypeID==0 && n.MilestoneID != null).ToList();
+                    List<TimelineEntry> lstCompletedMilestone = db.TimelineEntry.Get(n => n.UserID == lngUserID && n.TypeID == 0 && n.MilestoneID != null && n.CompletedStatus == 1).ToList();
 
                     if (lstCompletedMilestone.Count > 0)
                     {
@@ -1357,12 +1377,13 @@ namespace SuperBabyWCF
 
                             string SuperBabyWebUrl = ConfigurationManager.AppSettings["SuperBabyWebUrl"];
                             string LoginLink = SuperBabyWebUrl + "ChangePassword/Index?UR=" + Password + "&UT=" + Security.GetPasswordHash(Convert.ToString(1), Security.CreateSalt(8)) + "&initiallogin=true&Uid=" + objUser.ID.ToString() + "&Redirect=mobapp";
+                            //string LoginLink = "http://192.168.0.6/RudderWeb/ChangePassword/Index?UR=" + Password + "&UT=" + Security.GetPasswordHash(Convert.ToString(1), Security.CreateSalt(8)) + "&initiallogin=true&Uid=" + objUser.ID.ToString() + "&Redirect=mobapp";// EncryptionHandler.Encode(strResetPassKey);
 
                             string MailBody = string.Empty;
                             StringBuilder stringBuilderText = new StringBuilder();
 
 
-                            string mailContent = "<html><head><title></title></head><body><table><tr><td>Dear @user@,<br /><br /></td></tr><tr><td>You requested that we reset your password for your account with SuperBaby on @datetimecreated@. <br /> <br /> Please visit this link within 24 hours to reset your password: <br /></td></tr><tr><td><a href='@loginlink@'>@loginlink@</a></td></tr><tr><td>&nbsp;</td></tr><tr><td>Thanks!<br/> The SuperBaby Team</td></tr></table></body></html>";
+                            string mailContent = "<html><head><title></title></head><body><table><tr><td>Dear @user@,<br /><br /></td></tr><tr><td>You requested that we reset your password for your account with Rudder on @datetimecreated@. <br /> <br /> Please visit this link within 24 hours to reset your password: <br /></td></tr><tr><td><a href='@loginlink@'>@loginlink@</a></td></tr><tr><td>&nbsp;</td></tr><tr><td>Thanks!<br/> The Rudder Team</td></tr></table></body></html>";
 
                             mailContent = mailContent.Replace("@user@", "User");
                             mailContent = mailContent.Replace("@loginlink@", LoginLink);
@@ -1375,7 +1396,7 @@ namespace SuperBabyWCF
                             MailBody = stringBuilderText.ToString();
 
 
-                            SendMail(objUser.Email.Trim(), "", "", "[SupperBaby] Your Password Reset Request", MailBody, string.Empty, true, "","Recognized App");
+                            SendMail(objUser.Email.Trim(), "", "", "[SupperBaby] Your Password Reset Request", MailBody, string.Empty, true, "", true, "Recognized App");
                             #endregion
 
                             #region AddToDatabase
@@ -1632,7 +1653,7 @@ namespace SuperBabyWCF
             }
         }
 
-        public static bool SendMail(string MailTo, string MailCC, string MailBCC, string Subject, string Body, string Attachment, bool IsBodyHtml, string EmailEncoding, string FromName)
+        public static bool SendMail(string MailTo, string MailCC, string MailBCC, string Subject, string Body, string Attachment, bool IsBodyHtml, string EmailEncoding, bool UseSSL, string FromName)
         {
             MailMessage message = new MailMessage();
 
@@ -1683,7 +1704,7 @@ namespace SuperBabyWCF
             if (ConfigurationManager.AppSettings["IsProduction"].ToString().ToUpper() == "true".ToUpper())
             {
                 smtp.Host = strSMTPServer;
-                smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["Ssl"].ToString().ToLower());
+                smtp.EnableSsl = UseSSL;
             }
             else
             {

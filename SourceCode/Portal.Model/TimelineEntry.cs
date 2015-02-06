@@ -21,6 +21,7 @@ namespace Portal.Model
         public string Message { get; set; }
         public Nullable<long> MilestoneID { get; set; }
         public Nullable<long> VideoID { get; set; }
+        public int CompletedStatus { get; set; }
     
         public virtual TypeMaster TypeMaster { get; set; }
         public virtual User User { get; set; }

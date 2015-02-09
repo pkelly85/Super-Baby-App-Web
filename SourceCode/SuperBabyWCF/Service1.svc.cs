@@ -1170,7 +1170,7 @@ namespace SuperBabyWCF
                     List<TimelineEntry> objTimelineEntries = new List<TimelineEntry>();
 
                     long lngUserID = Convert.ToInt64(UserID);
-                    objTimelineEntries = db.TimelineEntry.Get(n => n.UserID == lngUserID).ToList();
+                    objTimelineEntries = db.TimelineEntry.Get(n => n.UserID == lngUserID).OrderByDescending(n=>n.ID).ToList();
 
                     if (objTimelineEntries.Count > 0)
                     {
@@ -1197,7 +1197,7 @@ namespace SuperBabyWCF
 
                         if (objlstTimelineEntryResult.Count > 0)
                         {
-                            objlstTimelineEntryResult = objlstTimelineEntryResult.OrderByDescending(n => n.TimelineID).Take(takecount).Skip(skipcount).ToList();
+                            objlstTimelineEntryResult = objlstTimelineEntryResult.Take(takecount).Skip(skipcount).ToList();
                             if (objlstTimelineEntryResult.Count > 0)
                             {
                                 ResultStatus.Status = "1";

@@ -57,7 +57,7 @@ namespace SuperBabyWCF
 
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "GetCompletedMilestones", BodyStyle = WebMessageBodyStyle.Wrapped)]
-        GetCompletedMilestonesResult GetCompletedMilestones(string UserID, string UserToken);
+        GetCompletedMilestonesResult GetCompletedMilestones(string UserID, string UserToken, string Type);
 
     }
 

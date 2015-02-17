@@ -1102,7 +1102,7 @@ namespace SuperBabyWCF
                             }
                             else if (intCompletedStatus == 0)
                             {
-                                if (intType == 0) //Milestone complete
+                                if (intType == 0 || intType == 4) //Milestone complete
                                 {
                                     List<TimelineEntry> lstTimeLineEntry = db.TimelineEntry.Get(n => n.TypeID == intType && n.MilestoneID == lngMilestoneID).ToList();
                                     if (lstTimeLineEntry.Count > 0)
@@ -1241,7 +1241,7 @@ namespace SuperBabyWCF
         }
         #endregion
 
-        public GetCompletedMilestonesResult GetCompletedMilestones(string UserID, string UserToken)
+        public GetCompletedMilestonesResult GetCompletedMilestones(string UserID, string UserToken, string Type)
         {
             GetCompletedMilestonesResult objCompletedMilestonesResult = new GetCompletedMilestonesResult();
             List<string> lstCompletedMilestones = new List<string>();
@@ -1252,14 +1252,17 @@ namespace SuperBabyWCF
             {
                 writeLog("GetCompletedMilestones", "START", UserID, "0");
                 var db = new UnitOfWork();
+
+                if (Type == null || Type.Length <= 0) Type = "0";
+                int intType = Convert.ToInt32(Type);
+
                 if (objTokenInfo != null && objTokenInfo.EmailID != null)
                 {
                     long lngUserID = Convert.ToInt64(UserID);
-                    List<TimelineEntry> lstCompletedMilestone = db.TimelineEntry.Get(n => n.UserID == lngUserID && n.TypeID == 0 && n.MilestoneID != null && n.CompletedStatus == 1).ToList();
+                    List<TimelineEntry> lstCompletedMilestone = db.TimelineEntry.Get(n => n.UserID == lngUserID && n.TypeID == intType && n.MilestoneID != null && n.CompletedStatus == 1).ToList();
 
                     if (lstCompletedMilestone.Count > 0)
                     {
-                        
                         foreach (var objTimeLineEntry in lstCompletedMilestone)
                         {
                             if (lstCompletedMilestones.Contains(objTimeLineEntry.MilestoneID.ToString())) continue;
